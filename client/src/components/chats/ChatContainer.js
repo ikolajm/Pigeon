@@ -4,7 +4,6 @@ import { COMMUNITY_CHAT, MESSAGE_SENT, MESSAGE_RECEIVED, TYPING, PRIVATE_MESSAGE
 import ChatHeading from './ChatHeading';
 import Messages from '../Messages';
 import MessageInput from '../MessageInput';
-import { difference } from 'lodash';
 
 export default class ChatComponent extends Component {
     constructor(props) {
@@ -30,6 +29,9 @@ export default class ChatComponent extends Component {
         socket.emit(COMMUNITY_CHAT, this.resetChat)
 		socket.on(PRIVATE_MESSAGE, this.addChat)
         socket.on(NEW_CHAT_USER, this.addUserToChat)
+        socket.on('connect', () => {
+            socket.emit(COMMUNITY_CHAT, this.resetChat)
+        })
     }
 
     sendOpenPrivateMessage = (reciever) => {
@@ -44,7 +46,7 @@ export default class ChatComponent extends Component {
             if (chat.id === chatId) {
                 return {...chat, users: [...chat.users, newUser] }
             }
-            return chats;
+            return chat;
         })
         this.setState({
             chats: newChats

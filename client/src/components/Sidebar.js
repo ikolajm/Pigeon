@@ -38,7 +38,7 @@ export default class Sidebar extends Component {
                     { this.props.chats.map( chat => {
                         if(chat.name) {
                             const lastMessage = chat.messages[chat.messages.length - 1];
-                            const chatName = chat.isCommunity ? chat.name : createChatFromUsers(chat.users, this.props.user.name)
+                            const chatName = chat.isGlobal ? chat.name : createChatFromUsers(chat.users, this.props.user.name)
                             const classNames = (this.props.activeChat && this.props.activeChat.id === chat.id) ? 'active' : ''
                             
                             return (

@@ -19,7 +19,7 @@ const createMessage = ({message = '', sender = ''}) => ({
 // Create Chat
 const createChat = ( {messages = [], name = 'Global', users = [], isGlobal = false } = {} ) => ({
     id: uuid(),
-    name: (isGlobal ? 'Global' : createChatFromUsers(users)),
+    name,
     messages,
     users,
     typingUsers: [],
