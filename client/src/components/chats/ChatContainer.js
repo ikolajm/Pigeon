@@ -29,9 +29,6 @@ export default class ChatComponent extends Component {
         socket.emit(COMMUNITY_CHAT, this.resetChat)
 		socket.on(PRIVATE_MESSAGE, this.addChat)
         socket.on(NEW_CHAT_USER, this.addUserToChat)
-        socket.on('connect', () => {
-            socket.emit(COMMUNITY_CHAT, this.resetChat)
-        })
     }
 
     sendOpenPrivateMessage = (reciever) => {
@@ -141,7 +138,7 @@ export default class ChatComponent extends Component {
         
         return (
             <div className="container">
-                <Sidebar title={this.props.title} logout={this.props.logout} chats={this.state.chats} activeChat={this.state.activeChat} setActiveChat={this.setActiveChat} user={this.props.user} onSendPrivateMessage={this.sendOpenPrivateMessage} />
+                <Sidebar title={this.props.title} logout={this.props.logout} chats={this.state.chats} activeChat={this.state.activeChat} setActiveChat={this.setActiveChat} user={this.props.user} onSendPrivateMessage={this.sendOpenPrivateMessage} socket={this.props.socket} />
                 <div className="chat-room-container">
                 {
                     this.state.activeChat !== null ? (

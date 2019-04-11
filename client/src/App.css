@@ -474,3 +474,23 @@ input, textarea {
     opacity: .2;
     background: #5d5d8a
 }
+
+.user-suggest {
+    background: #5d5d8a;
+    padding: .5rem;
+}
+
+.user-suggest h3 {
+    margin-top: .1rem;
+    margin-bottom: .5rem;
+}
+
+.user-suggest div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-suggest div .user-info button {
+    background: #dfdfe8;
+    color: #2e2e4f;
+}

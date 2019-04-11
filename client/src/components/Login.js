@@ -28,8 +28,12 @@ export default class Login extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         const socket = this.props.socket;
-        const name = this.state.name;
-        socket.emit(VERIFY_USER, name, this.setUser);
+        const name = this.state.name.trim();
+        if (name === "") {
+            this.setError("You must have a name!")
+        } else {
+            socket.emit(VERIFY_USER, name, this.setUser);
+        }
     }
 
     handleChange = (e) => {
@@ -50,6 +54,7 @@ export default class Login extends Component {
                         value={this.state.name}
                         onChange={this.handleChange}
                         placeholder="Your Username"
+                        autoComplete="off"
                     />
                     {/* If error */}
                     <div className="error">{error !== null ? error : null }</div>

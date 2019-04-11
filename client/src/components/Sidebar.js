@@ -1,24 +1,72 @@
 import React, { Component } from 'react';
 import { FaSistrix, FaDoorOpen } from 'react-icons/fa';
 import { createChatFromUsers } from '../Factories';
+import { USER_SEARCH } from '../Events'
 
 export default class Sidebar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: ''
+            name: '',
+            searchResults: []
         }
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.onSendPrivateMessage(this.state.name)
+    componentDidMount() {
+        const socket = this.props.socket
+        socket.on(USER_SEARCH, this.userFilter)
+    }
+
+    handleSubmit = name => {
+        this.props.onSendPrivateMessage(name)
         this.setState({
-            name: ''
+            name: '',
+            searchResults: []
+        })
+    }
+
+    searchTyping = (e) => {
+        this.setState({
+            name: e.target.value.trim()
+        })
+        this.sendFilter()
+    }
+    
+    sendFilter = () => {
+        const socket = this.props.socket;
+        socket.emit(USER_SEARCH, {name: this.state.name, exclude: this.props.user.name})
+    }
+
+    userFilter = (array) => {
+        this.setState({
+            searchResults: array
         })
     }
 
     render() {
+        let search = (
+            (this.state.name.length > 0) ? 
+                        (
+                            <div className="user-suggest">
+                                <h3>User Suggestions:</h3>
+                                {
+                                    (this.state.searchResults.length > 0) ?
+                                    (
+                                        this.state.searchResults.map((user, index) => (
+                                            (<div key={user + index}>
+                                                <div className="user-photo">{user}</div>
+                                                <div className="user-info">
+                                                    <button onClick={() => this.handleSubmit(user)}>Chat!</button>
+                                                </div>
+                                            </div>)
+                                        ))
+                                    ) : 
+                                    <span>No users online with that name!</span>
+                                }
+                            </div>
+                        ) :
+                        null
+        )
         return (
             <div id="side-bar">
                 {/* Heading */}
@@ -26,13 +74,14 @@ export default class Sidebar extends Component {
                     <div className="app-name">{this.props.title}</div>
                 </div>
                 {/* Search */}
-                <form onSubmit={this.handleSubmit} className="search">
+                <form className="search">
                     <i className="search-icon"><FaSistrix /></i>
-                    <input onChange={e => { this.setState({ name: e.target.value })}} placeholder="Search" type="text" value={this.state.name} />
-                    <div className="plus"></div>
+                    <input onChange={this.searchTyping} placeholder="Search for user..." type="text" value={this.state.name} />
                 </form>
                 {/* Chats */}
                 <div className="users">
+                    {/* User suggestions */}
+                    {search}
                     
                     {/* Show individual chats (previews) */}
                     { this.props.chats.map( chat => {
@@ -57,7 +106,7 @@ export default class Sidebar extends Component {
                                 </div>
                             )
                         } else {
-                            return
+                            return null
                         }
                     }) }
                     
