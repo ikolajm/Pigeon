@@ -1,5 +1,5 @@
 
-const { VERIFY_USER, USER_CONNECTED, LOGOUT, USER_DISCONNECTED, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE, NEW_CHAT_USER } = require('../client/src/Events');
+const { VERIFY_USER, USER_CONNECTED, LOGOUT, USER_DISCONNECTED, COMMUNITY_CHAT, MESSAGE_RECEIVED, MESSAGE_SENT, TYPING, PRIVATE_MESSAGE, NEW_CHAT_USER, USER_SEARCH } = require('../client/src/Events');
 const { createUser, createMessage, createChat } = require('../client/src/Factories');
 const io = require('./index').io
 
@@ -33,7 +33,6 @@ module.exports = socket => {
     // User disconnect
     socket.on('disconnect', () => {
         if ("user" in socket) {
-            console.log(socket.user.name + ' has disconnected!')
             connectedUsers = removeUser(connectedUsers, socket.user.name)
             io.emit(USER_DISCONNECTED, connectedUsers)
         }
@@ -84,6 +83,11 @@ module.exports = socket => {
         }
     })
 
+    // On search for user
+    socket.on(USER_SEARCH, ({name, exclude}) => {
+        filterUsers(name, exclude)
+    })
+
     // Check if username is currently taken
     isUser = (userList, username) => {
         return username in userList
@@ -115,5 +119,18 @@ module.exports = socket => {
         return (chatId, isTyping) => {
             io.emit(`${TYPING} - ${chatId}`, {user, isTyping})
         }
+    }
+
+    // Filter connected users to search term
+    filterUsers = (name, exclude) => {
+        let filter = [];
+        let searchArr = removeUser(connectedUsers, exclude)
+        for (user in searchArr) {
+            if (user.toUpperCase().indexOf(name.toUpperCase()) === 0) {
+                filter.push(user);
+            }
+        }
+        filter = filter.slice(0,5);
+        io.emit(USER_SEARCH, filter);
     }
 }
