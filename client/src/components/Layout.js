@@ -52,13 +52,13 @@ export default class Layout extends Component {
 
     render() {
         return (
-            <div className="container">
+            <React.Fragment>
             {
                 !this.state.user ?
                 <Login socket={this.state.socket} setUser={this.setUser} /> :
                 <ChatContainer title={this.props.title} socket={this.state.socket} user={this.state.user} logout={this.logout} />
             }
-            </div>
+            </React.Fragment>
         )
     }
 }

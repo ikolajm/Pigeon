@@ -3,6 +3,8 @@ import { FaSistrix, FaDoorOpen } from 'react-icons/fa';
 import { createChatFromUsers } from '../Factories';
 import { USER_SEARCH } from '../Events'
 
+import { Button } from 'reactstrap'
+
 export default class Sidebar extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +58,7 @@ export default class Sidebar extends Component {
                                             (<div key={user + index}>
                                                 <div className="user-photo">{user}</div>
                                                 <div className="user-info">
-                                                    <button onClick={() => this.handleSubmit(user)}>Chat!</button>
+                                                    <Button color="secondary" onClick={() => this.handleSubmit(user)}>Chat!</Button>
                                                 </div>
                                             </div>)
                                         ))
@@ -71,7 +73,7 @@ export default class Sidebar extends Component {
             <div id="side-bar">
                 {/* Heading */}
                 <div className="heading">
-                    <div className="app-name">{this.props.title}</div>
+                    <div className="title">{this.props.title}</div>
                 </div>
                 {/* Search */}
                 <form className="search">

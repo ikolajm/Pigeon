@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { VERIFY_USER } from '../Events';
+import { Button } from 'reactstrap' 
 
 export default class Login extends Component {
     constructor(props) {
@@ -29,8 +30,8 @@ export default class Login extends Component {
         e.preventDefault()
         const socket = this.props.socket;
         const name = this.state.name.trim();
-        if (name === "") {
-            this.setError("You must have a name!")
+        if (name.length < 4) {
+            this.setError("Name must be at least 4 characters!")
         } else {
             socket.emit(VERIFY_USER, name, this.setUser);
         }
@@ -46,8 +47,10 @@ export default class Login extends Component {
         const error = this.state.error;
         return (
             <div className="login">
+                <h1 className="title">Pigeon</h1>
+                <h3>Entirely anonymous messaging.</h3>
                 <form onSubmit={this.handleSubmit} className="login-form">
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">What should we call you?</label>
                     <input 
                         id="name" 
                         type="text"
@@ -58,7 +61,7 @@ export default class Login extends Component {
                     />
                     {/* If error */}
                     <div className="error">{error !== null ? error : null }</div>
-                    <button>Submit</button>
+                    <Button color="secondary">Enter Chatroom</Button>
                 </form>
             </div>
         )

@@ -137,7 +137,7 @@ export default class ChatComponent extends Component {
             }}/> )
         
         return (
-            <div className="container">
+            <div className="contain">
                 <Sidebar title={this.props.title} logout={this.props.logout} chats={this.state.chats} activeChat={this.state.activeChat} setActiveChat={this.setActiveChat} user={this.props.user} onSendPrivateMessage={this.sendOpenPrivateMessage} socket={this.props.socket} />
                 <div className="chat-room-container">
                 {
