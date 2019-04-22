@@ -58,7 +58,7 @@ export default class Sidebar extends Component {
                                             (<div key={user + index}>
                                                 <div className="user-photo">{user}</div>
                                                 <div className="user-info">
-                                                    <Button color="secondary" onClick={() => this.handleSubmit(user)}>Chat!</Button>
+                                                    <Button color="secondary" size="sm" onClick={() => this.handleSubmit(user)}>Chat!</Button>
                                                 </div>
                                             </div>)
                                         ))
